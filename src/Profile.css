@@ -1,0 +1,61 @@
+.user-profile{
+    margin: 4.5rem;
+}
+.profile-img-container {
+    height: 10rem;
+    overflow: hidden;
+    border-radius: 50%;
+}
+.profile-img-container img {
+    width: 100%;
+    height: 100%;
+}
+.user-profile-container{
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 5rem;
+}
+.edit-profile{
+    margin: 0 1.2rem;
+    padding: .2rem 1rem;
+    border-radius: 3px;
+    border: 1px solid rgba(0, 0, 0, 0.13);
+}
+.user-details{
+    margin-top: 1rem;
+}
+.user-details-top{
+    display: flex;
+    align-items: center;
+}
+.user-followers{
+    margin: 1.2rem 0;
+    display: flex;
+    align-items: center;
+}
+.followers{
+    margin: 0 2.5rem;
+}
+.profile-post-container{
+    border-top: 1px solid rgba(0, 0, 0, 0.219);
+}
+.post-icon-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;  
+}
+.align-it{
+    display: flex;
+    align-items: center;
+    border-top: 1px solid black;
+    padding-top: 1rem;
+    margin-bottom: 1rem;
+    margin-top: -1px;
+}
+.profile-posts-grid{
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 2rem;
+    margin-bottom: 2rem;
+}

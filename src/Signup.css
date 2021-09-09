@@ -1,0 +1,16 @@
+.signup{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 1rem;
+}
+.have-acc{
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, 0.178);
+    text-align: center;
+    font-size: small;
+    padding: 1.3rem 0;
+    margin-top: 1rem;
+    width: 350px;
+}
