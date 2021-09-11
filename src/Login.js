@@ -31,7 +31,7 @@ const Login = () => {
         <div>
             <div className='login'>
             <img src={loginImg} alt="" />
-            <div>
+            <div className='log-container'>
             <form onSubmit={handleLogin} className='login-form'>
                 <h1 style={{marginBottom:'2.5rem',fontFamily:'cursive'}}>InstaClone</h1>
                 <input type="email" required placeholder='Email address' onChange={(e)=>{setEmail(e.target.value)}}/>

@@ -114,7 +114,7 @@ const Timeline = () => {
                     <h3>Create post</h3>
                     <span className="material-icons-outlined close-post" onClick={()=>{setModel(false)}}>close</span>
                     </div>
-                    <div className='model-center'>
+                    <div className='model-center-send'>
                         <div className='model-user'>
                             <span className="material-icons-outlined">account_circle</span>
                             <span>{user.displayName}</span>
@@ -183,6 +183,7 @@ const Timeline = () => {
                         <div className='timeline-img-container'>
                         <img src={post.imgUrl} alt="" />
                         </div>
+                        <div>
                         <div className='post-icons'>
                             <div className='left-icons'>
                                 <i className="far fa-heart"></i>
@@ -235,6 +236,7 @@ const Timeline = () => {
                         <input className='comment-input' ref={ref} type="text" placeholder='Add a comment...' onChange={(e)=>{setComment(e.target.value)}}/>
                         <button type="submit" onClick={reset}>Post</button>
                         </form>
+                        </div>
                     </motion.div>
                 )}
             </div>}

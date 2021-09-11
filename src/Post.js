@@ -97,7 +97,7 @@ const Post = () => {
                     <h3>Create post</h3>
                     <span className="material-icons-outlined close-post" onClick={()=>{setModel(false)}}>close</span>
                     </div>
-                    <div className='model-center'>
+                    <div className='model-center-send'>
                         <div className='model-user'>
                             <span className="material-icons-outlined">account_circle</span>
                             <span>{user.displayName}</span>
@@ -150,11 +150,7 @@ const Post = () => {
             {singlePost &&
                 <div className='post-contain'>
                 <motion.div className='the-post' style={{border:'1px solid rgba(0, 0, 0, 0.178)'}} initial={{opacity:0,scale:.8}} animate={{opacity:1,scale:1}}>
-                    <div className='left-model'>
-                        <img src={singlePost.imgUrl} alt="" />
-                    </div>
-                    <div className='right-model'>
-                        <div style={{display:'flex',justifyContent:'space-between',borderBottom:'1px solid rgba(0, 0, 0, 0.178)'}}>
+                 <div className='mod-user-det' style={{display:'none',justifyContent:'space-between',borderBottom:'1px solid rgba(0, 0, 0, 0.178)'}}>
                         <div style={{margin:'1rem'}} className='model-user'>
                             <span className="material-icons-outlined">account_circle</span>
                             <span style={{fontWeight:'bold'}}>{singlePost.userName}</span>
@@ -166,7 +162,23 @@ const Post = () => {
                              setUserId(singlePost.userId)
                         }}>more_horiz</span>
                         </div>
-                        <div className='model-center'>
+                    <div className='left-model'>
+                        <img src={singlePost.imgUrl} alt="" />
+                    </div>
+                    <div className='right-model'>
+                        <div className='mod-user-details' style={{display:'flex',justifyContent:'space-between',borderBottom:'1px solid rgba(0, 0, 0, 0.178)'}}>
+                        <div style={{margin:'1rem'}} className='model-user'>
+                            <span className="material-icons-outlined">account_circle</span>
+                            <span style={{fontWeight:'bold'}}>{singlePost.userName}</span>
+                        </div>
+                        <span style={{margin:'1rem',cursor:'pointer',color:'gray'}} className="material-icons-outlined" onClick={()=>{
+                             setDeleteModel(true)
+                             
+                             setPostPath(singlePost.filePath)
+                             setUserId(singlePost.userId)
+                        }}>more_horiz</span>
+                        </div>
+                        <div className='model-center for-post'>
                             <div style={{display:'flex'}}>
                                <span style={{marginRight:'.5rem'}} className="material-icons-outlined">account_circle</span>
                                <span style={{fontWeight:'bold',marginRight:".5rem"}}>{singlePost.userName}</span>

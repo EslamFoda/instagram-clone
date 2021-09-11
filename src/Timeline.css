@@ -107,7 +107,7 @@ nav {
     display: flex;
     align-items: center;
 }
-.model-center{
+.model-center-send{
     padding: 1rem;
 }
 .model-user span {
@@ -145,8 +145,8 @@ nav {
     background-color: white;
     border: 1px solid rgba(0, 0, 0, 0.178);
     margin-bottom: 1.5rem;
-    display: flex;
-    flex-direction: column;
+  display: grid;
+  grid-template-rows: auto 1fr;
 }
 
 .timeline-img-container{
@@ -156,7 +156,7 @@ nav {
     height: 100%;
     width: 100%;
     object-fit: cover;
-   
+
 }
 .post-icons{
     display: flex;

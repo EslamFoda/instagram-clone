@@ -109,11 +109,23 @@ const Profile = () => {
                 <motion.div className='explore-model' initial={{opacity:0,scale:.5}} animate={{opacity:1,scale:1}} transition={{type:'just'}}
                 exit={{scale:.5,opacity:0}}
                 >
+                    <div className='mod-user-det' style={{display:'none',justifyContent:'space-between',borderBottom:'1px solid rgba(0, 0, 0, 0.178)'}}>
+                        <div style={{margin:'1rem'}} className='model-user'>
+                            <span className="material-icons-outlined">account_circle</span>
+                            <span style={{fontWeight:'bold'}}>{singlePost.userName}</span>
+                        </div>
+                        <span style={{margin:'1rem',cursor:'pointer',color:'gray'}} className="material-icons-outlined" onClick={()=>{
+                             setDeleteModel(true)
+                             setPostId(singlePost.id)
+                             setPostPath(singlePost.filePath)
+                             setUserId(singlePost.userId)
+                        }}>more_horiz</span>
+                        </div>
                     <div className='left-model'>
                         <img src={singlePost.imgUrl} alt="" />
                     </div>
                     <div className='right-model'>
-                        <div style={{display:'flex',justifyContent:'space-between',borderBottom:'1px solid rgba(0, 0, 0, 0.178)'}}>
+                        <div className='mod-user-details' style={{display:'flex',justifyContent:'space-between',borderBottom:'1px solid rgba(0, 0, 0, 0.178)'}}>
                         <div style={{margin:'1rem'}} className='model-user'>
                             <span className="material-icons-outlined">account_circle</span>
                             <span style={{fontWeight:'bold'}}>{singlePost.userName}</span>
@@ -201,7 +213,7 @@ const Profile = () => {
                     <h3>Create post</h3>
                     <span className="material-icons-outlined close-post" onClick={()=>{setModel(false)}}>close</span>
                     </div>
-                    <div className='model-center'>
+                    <div className='model-center-send'>
                         <div className='model-user'>
                             <span className="material-icons-outlined">account_circle</span>
                             <span>{user.displayName}</span>
