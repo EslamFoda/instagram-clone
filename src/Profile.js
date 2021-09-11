@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import userImg from './imgs/user.jpg'
 import { projectAuth,database,timestamp,projectStorage } from "./firebase";
 import { Redirect } from "react-router";
+import { motion,AnimatePresence } from "framer-motion";
 import './Profile.css'
 const Profile = () => {
     const [model,setModel] = useState()
@@ -23,6 +24,8 @@ const Profile = () => {
      const ref = useRef();
      const [userId,setUserId] = useState(null)
     const [deleteModel,setDeleteModel] = useState(false)
+    const [deleteCommentModel,setDeleteCommentModel] = useState(false)
+    const [commentId,setCommentId] = useState(null)
     useEffect(()=>{
         const unsub = projectAuth.onAuthStateChanged(user=>{
             setUser(user)
@@ -72,24 +75,40 @@ const Profile = () => {
     if(!user) return <Redirect to='/'></Redirect>
     return ( 
         <div className='container'>
+            {deleteCommentModel && <div className='del-model-overlay'>
+                <motion.div className='delete-container' initial={{opacity:0,scale:1.2}} animate={{opacity:1,scale:1}}>
+                   <h5 style={{borderBottom:'1px solid rgba(0, 0, 0, 0.39)',color:'red',fontWeight:"bold"}} onClick={async()=>{
+                        const delComments = singlePost.comments.filter(comment=>{
+                            return comment.id !== commentId
+                        })
+                        
+                       database.collection('post').doc(postId).update({comments:delComments})
+                       setDeleteCommentModel(false)
+                    }}>Delete</h5>
+                    <h5 onClick={()=>setDeleteCommentModel(false)}>Cancel</h5>
+                </motion.div>
+            </div>}
              {deleteModel && <div className='del-model-overlay'>
-                <div className='delete-container'>
+                <motion.div className='delete-container' initial={{opacity:0,scale:1.2}} animate={{opacity:1,scale:1}}>
                     <Link to={`/post/${postId}`}>
                     <h5 style={{borderBottom:'1px solid rgba(0, 0, 0, 0.39)'}}>Go to post</h5>
                     </Link>
                     {user && user.uid === userId && <h5 style={{borderBottom:'1px solid rgba(0, 0, 0, 0.39)',color:'red',fontWeight:"bold"}} onClick={async()=>{
+                        setDeleteModel(false)
+                        setOpenModel(false)
                         await database.collection('post').doc(postId).delete()
                         const storageRef = projectStorage.ref(postPath)
                         await storageRef.delete()
-                        setDeleteModel(false)
-                        setOpenModel(false)
                     }}>Delete post</h5>}
                     <h5 onClick={()=>setDeleteModel(false)}>Cancel</h5>
-                </div>
+                </motion.div>
             </div>}
+            <AnimatePresence>
             {openModel && singlePost && <div className='model-overlay'>
                 <span className="material-icons-outlined close-post" onClick={()=>{setOpenModel(false)}}>close</span>
-                <div className='explore-model'>
+                <motion.div className='explore-model' initial={{opacity:0,scale:.5}} animate={{opacity:1,scale:1}} transition={{type:'just'}}
+                exit={{scale:.5,opacity:0}}
+                >
                     <div className='left-model'>
                         <img src={singlePost.imgUrl} alt="" />
                     </div>
@@ -114,15 +133,19 @@ const Profile = () => {
                             </div>
                             {singlePost && singlePost.comments && <div>
                             {singlePost.comments.map(comment=>
-                                <div className='single-model-comment' key={comment.id}>
+                                <motion.div className='single-model-comment' key={comment.id} initial={{opacity:0}} animate={{opacity:1}}>
                                     <div style={{display:'flex',alignItems:'center'}}>
                                     <span style={{marginRight:'.5rem'}} className="material-icons-outlined">account_circle</span>
                                <span style={{fontWeight:'bold',marginRight:".5rem"}}>{comment.username}</span>
                                <span>{comment.comment}</span>
                                     </div>
-                                     <span className="material-icons-outlined del-comment">more_horiz</span>
+                                    {user && user.uid === comment.userId && <span className="material-icons-outlined del-comment" onClick={()=>{
+                                         setCommentId(comment.id)
+                                         setPostId(singlePost.id)
+                                         setDeleteCommentModel(true)
+                                     }}>more_horiz</span>}
                                      
-                                </div>
+                                </motion.div>
                             )}
 
                             </div>}
@@ -160,18 +183,20 @@ const Profile = () => {
                         <button type="submit">Post</button>
                         </form>
                     </div>
-                </div>
+                </motion.div>
             </div>}
+
+            </AnimatePresence>
             {logoutModel && <div className='del-model-overlay'>
-                <div className='delete-container'>
+                <motion.div className='delete-container' initial={{opacity:0,y:-100}} animate={{opacity:1,y:0}} transition={{type:'just'}}>
                      <h5 style={{borderBottom:'1px solid rgba(0, 0, 0, 0.39)'}} onClick={async()=>{
                         await projectAuth.signOut()
                     }}>Log Out</h5>
                     <h5 onClick={()=>setLogoutModel(false)}>Cancel</h5>
-                </div>
+                </motion.div>
             </div>}
             {model && <div className='model-overlay' onClick={(e)=>{if(e.target.className === 'model-overlay'){setModel(false)}}}>
-                <div className='model-container'>
+                <motion.div className='model-container' initial={{opacity:0,y:-100}} animate={{opacity:1,y:0}} transition={{type:'just'}}>
                     <div className='model-top'>
                     <h3>Create post</h3>
                     <span className="material-icons-outlined close-post" onClick={()=>{setModel(false)}}>close</span>
@@ -203,7 +228,7 @@ const Profile = () => {
                         setModel(false)
                     }}>Post</button>
                     </div>
-                </div>
+                </motion.div>
             </div>}
             <nav>
                <Link style={{textDecoration:'none',color:"inherit"}} to='/timeline'>
@@ -221,9 +246,9 @@ const Profile = () => {
                       <i className="far fa-compass"></i>
                    </Link>
                     <i className="far fa-heart"></i>
-                     <Link to={`/${user.displayName}`}>
+                    
                     <i className="fas fa-user-circle"></i>
-                    </Link>
+                
                 </div>
             </nav>
             <div className='user-profile'>
@@ -260,12 +285,12 @@ const Profile = () => {
                 </div>
                {posts && <div className='profile-posts-grid'>
                    {posts.map(post=>
-                   <div className='single-explore-post' key={post.id} onClick={async()=>{
+                   <motion.div className='single-explore-post' key={post.id} onClick={async()=>{
                    setOpenModel(true)
                    database.collection('post').doc(post.id).onSnapshot(snap=>{
                        setSinglePost({...snap.data(),id:snap.id})
                    })
-               }}>
+               }} initial={{opacity:0,scale:.8}} animate={{opacity:1,scale:1}}>
                    <div className='explore-overview'>
                            <div className='explore-icon'>
                                <span style={{marginRight:"2.3rem"}} className='explore-icon-container'>
@@ -279,9 +304,10 @@ const Profile = () => {
                        </div>
                    </div>
                    <img src={post.imgUrl} alt="" />
-               </div>
+               </motion.div>
                    )}
                 </div>}
+                {posts && !posts.length && <div style={{textAlign:'center'}}>there is no posts yet</div>}
             </div>
         </div>
      );

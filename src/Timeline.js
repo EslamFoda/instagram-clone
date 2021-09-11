@@ -3,6 +3,7 @@ import { Redirect } from "react-router";
 import { projectAuth,projectStorage,database,timestamp } from "./firebase";
 import './Timeline.css'
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 const Timeline = () => {
     const ref = useRef();
     const [deleteModel,setDeleteModel] = useState(false)
@@ -15,9 +16,12 @@ const Timeline = () => {
     let filePath = null
     let url = null
     const [post,setPost] = useState('')
+    const [singlePost,setSinglePost] = useState(null)
     const [posts,setPosts] = useState(null)
     const [comment,setComment] = useState('')
     const type = ["image/jpeg","image/png"]
+    const [commentId,setCommentId] = useState(null)
+    const [deleteCommentModel,setDeleteCommentModel] = useState(false)
 
 
     const reset = () => {
@@ -78,8 +82,20 @@ const Timeline = () => {
     if(!user) return <Redirect to='/'></Redirect>
     return ( 
         <div className='container'>
+            {deleteCommentModel && <div className='del-model-overlay'>
+                <motion.div className='delete-container' initial={{opacity:0,scale:1.2}} animate={{opacity:1,scale:1}}>
+                   <h5 style={{borderBottom:'1px solid rgba(0, 0, 0, 0.39)',color:'red',fontWeight:"bold"}} onClick={async()=>{
+                       const delComments = singlePost.comments.filter(comment=>{
+                            return comment.id !== commentId
+                        })
+                         database.collection('post').doc(postId).update({comments:delComments})
+                         setDeleteCommentModel(false)
+                    }}>Delete</h5>
+                    <h5 onClick={()=>setDeleteCommentModel(false)}>Cancel</h5>
+                </motion.div>
+            </div>}
            {deleteModel && <div className='del-model-overlay'>
-                <div className='delete-container'>
+                <motion.div className='delete-container' initial={{opacity:0,scale:1.2}} animate={{opacity:1,scale:1}}>
                     <Link to={`/post/${postId}`}>
                     <h5 style={{borderBottom:'1px solid rgba(0, 0, 0, 0.39)'}}>Go to post</h5>
                     </Link>
@@ -90,10 +106,10 @@ const Timeline = () => {
                         await storageRef.delete()
                     }}>Delete post</h5>
                     <h5 onClick={()=>setDeleteModel(false)}>Cancel</h5>
-                </div>
+                </motion.div>
             </div>}
            {model && <div className='model-overlay' onClick={(e)=>{if(e.target.className === 'model-overlay'){setModel(false)}}}>
-                <div className='model-container'>
+                <motion.div className='model-container' initial={{opacity:0,y:-100}} animate={{opacity:1,y:0}} transition={{type:'just'}}>
                     <div className='model-top'>
                     <h3>Create post</h3>
                     <span className="material-icons-outlined close-post" onClick={()=>{setModel(false)}}>close</span>
@@ -125,7 +141,7 @@ const Timeline = () => {
                         setModel(false)
                     }}>Post</button>
                     </div>
-                </div>
+                </motion.div>
             </div>}
             <nav>
                 <div className='logo'>
@@ -147,9 +163,12 @@ const Timeline = () => {
                 </div>
             </nav>
             <div className='timeline-grid'>
+            
            {posts && <div className='timeline'>
                 {posts.map(post=>
-                    <div className='single-post' key={post.id}>
+                    <motion.div className='single-post' key={post.id} initial={{opacity:0,scale:.8}} animate={{opacity:1,scale:1}}
+                     transition={{type:'just'}}
+                    >
                         <div style={{display:'flex',justifyContent:'space-between'}}>
                         <div style={{margin:'1rem'}} className='model-user'>
                             <span className="material-icons-outlined">account_circle</span>
@@ -161,7 +180,9 @@ const Timeline = () => {
                             setPostPath(post.filePath)
                         }}>more_horiz</span>
                         </div>
+                        <div className='timeline-img-container'>
                         <img src={post.imgUrl} alt="" />
+                        </div>
                         <div className='post-icons'>
                             <div className='left-icons'>
                                 <i className="far fa-heart"></i>
@@ -184,9 +205,21 @@ const Timeline = () => {
                         </Link>
                         </div>
                         {post.comments.map(comment=>
-                            <div key={comment.id} style={{margin:'.5rem 1rem',fontSize:'.9rem'}}>
+                            <motion.div className='single-model-comment' key={comment.id} style={{margin:'.5rem 1rem',fontSize:'.9rem',display:'flex',alignItems:'center',justifyContent:'space-between'}}
+                            initial={{opacity:0}} animate={{opacity:1}}
+                            >
+                                <div>
                         <span style={{fontWeight:'bold'}}>{comment.username}</span> <span>{comment.comment}</span>
-                        </div>
+                                </div>
+                        {user && user.uid === comment.userId && <span className="material-icons-outlined del-comment" onClick={()=>{
+                                         setCommentId(comment.id)
+                                         setPostId(post.id)
+                                         setDeleteCommentModel(true)
+                                        database.collection('post').doc(post.id).onSnapshot(snap=>{
+                                        setSinglePost({...snap.data(),id:snap.id})
+                                      })
+                                     }}>more_horiz</span>}
+                        </motion.div>
                         )}
                         <form type="reset" onSubmit={async(e)=>{
                             e.preventDefault()
@@ -202,9 +235,10 @@ const Timeline = () => {
                         <input className='comment-input' ref={ref} type="text" placeholder='Add a comment...' onChange={(e)=>{setComment(e.target.value)}}/>
                         <button type="submit" onClick={reset}>Post</button>
                         </form>
-                    </div>
+                    </motion.div>
                 )}
             </div>}
+           
                 {posts && !posts.length && <div>there is no posts yet</div>}
             </div>
         </div>

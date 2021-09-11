@@ -145,9 +145,18 @@ nav {
     background-color: white;
     border: 1px solid rgba(0, 0, 0, 0.178);
     margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
 }
-.single-post img {
+
+.timeline-img-container{
+    max-height: 400px;
+}
+.timeline-img-container img{
+    height: 100%;
     width: 100%;
+    object-fit: cover;
+   
 }
 .post-icons{
     display: flex;

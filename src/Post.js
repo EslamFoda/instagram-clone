@@ -1,14 +1,15 @@
 import { useEffect, useState,useRef  } from "react";
 import { Redirect } from "react-router";
 import { projectAuth,projectStorage,database,timestamp } from "./firebase";
+import { motion } from "framer-motion";
 import './Post.css'
-import { Link, useParams } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 const Post = () => {
     const param = useParams()
     const ref = useRef();
     const [deleteModel,setDeleteModel] = useState(false)
     const [postPath,setPostPath] = useState(null)
-    const [postId,setPostId] = useState(null)
+    
     const [comment,setComment] = useState('')
     const [userId,setUserId] = useState(null)
     const [model,setModel] = useState(false)
@@ -17,9 +18,12 @@ const Post = () => {
     const [fileError,setFileError] = useState(null)
     const [file,setFile] = useState(null)
     const [singlePost,setSinglePost] = useState(null)
+    const history = useHistory()
     let filePath = null
     let url = null
     const type = ["image/jpeg","image/png"]
+    const [deleteCommentModel,setDeleteCommentModel] = useState(false)
+    const [commentId,setCommentId] = useState(null)
     useEffect(()=>{
         const unsub = projectAuth.onAuthStateChanged(user=>{
             setUser(user)
@@ -61,20 +65,34 @@ const Post = () => {
     if(!user) return <Redirect to='/'></Redirect>
     return ( 
         <div className='container'>
+            {deleteCommentModel && <div className='del-model-overlay'>
+                <motion.div className='delete-container' initial={{opacity:0,scale:1.2}} animate={{opacity:1,scale:1}} transition={{type:'just'}}>
+                   <h5 style={{borderBottom:'1px solid rgba(0, 0, 0, 0.39)',color:'red',fontWeight:"bold"}} onClick={async()=>{
+                        const delComments = singlePost.comments.filter(comment=>{
+                            return comment.id !== commentId
+                        })
+                        
+                       database.collection('post').doc(param.id).update({comments:delComments})
+                       setDeleteCommentModel(false)
+                    }}>Delete</h5>
+                    <h5 onClick={()=>setDeleteCommentModel(false)}>Cancel</h5>
+                </motion.div>
+            </div>}
             {deleteModel && <div className='del-model-overlay'>
-                <div className='delete-container'>
+                <motion.div className='delete-container' initial={{opacity:0,scale:1.2}} animate={{opacity:1,scale:1}} transition={{type:'just'}}>
                     <h5 style={{borderBottom:'1px solid rgba(0, 0, 0, 0.39)'}}>Go to post</h5>
                     {user && user.uid === userId && <h5 style={{borderBottom:'1px solid rgba(0, 0, 0, 0.39)',color:'red',fontWeight:"bold"}} onClick={async()=>{
-                        await database.collection('post').doc(postId).delete()
+                        history.push('/timeline')
+                        await database.collection('post').doc(param.id).delete()
                         const storageRef = projectStorage.ref(postPath)
                         await storageRef.delete()
                         setDeleteModel(false)
                     }}>Delete post</h5>}
                     <h5 onClick={()=>setDeleteModel(false)}>Cancel</h5>
-                </div>
+                </motion.div>
             </div>}
             {model && <div className='model-overlay' onClick={(e)=>{if(e.target.className === 'model-overlay'){setModel(false)}}}>
-                <div className='model-container'>
+                <motion.div className='model-container' initial={{opacity:0,y:-100}} animate={{opacity:1,y:0}} transition={{type:'just'}}>
                     <div className='model-top'>
                     <h3>Create post</h3>
                     <span className="material-icons-outlined close-post" onClick={()=>{setModel(false)}}>close</span>
@@ -106,7 +124,7 @@ const Post = () => {
                         setModel(false)
                     }}>Post</button>
                     </div>
-                </div>
+                </motion.div>
             </div>}
             <nav>
                <Link style={{textDecoration:'none',color:"inherit"}} to='/timeline'>
@@ -131,7 +149,7 @@ const Post = () => {
             </nav>
             {singlePost &&
                 <div className='post-contain'>
-                <div className='the-post' style={{border:'1px solid rgba(0, 0, 0, 0.178)'}}>
+                <motion.div className='the-post' style={{border:'1px solid rgba(0, 0, 0, 0.178)'}} initial={{opacity:0,scale:.8}} animate={{opacity:1,scale:1}}>
                     <div className='left-model'>
                         <img src={singlePost.imgUrl} alt="" />
                     </div>
@@ -143,7 +161,7 @@ const Post = () => {
                         </div>
                         <span style={{margin:'1rem',cursor:'pointer',color:'gray'}} className="material-icons-outlined" onClick={()=>{
                              setDeleteModel(true)
-                             setPostId(singlePost.id)
+                             
                              setPostPath(singlePost.filePath)
                              setUserId(singlePost.userId)
                         }}>more_horiz</span>
@@ -156,15 +174,19 @@ const Post = () => {
                             </div>
                             {singlePost && singlePost.comments && <div>
                             {singlePost.comments.map(comment=>
-                                <div className='single-model-comment' key={comment.id}>
+                                <motion.div className='single-model-comment' key={comment.id} initial={{opacity:0}} animate={{opacity:1}}>
                                     <div style={{display:'flex',alignItems:'center'}}>
                                     <span style={{marginRight:'.5rem'}} className="material-icons-outlined">account_circle</span>
                                <span style={{fontWeight:'bold',marginRight:".5rem"}}>{comment.username}</span>
                                <span>{comment.comment}</span>
                                     </div>
-                                     <span className="material-icons-outlined del-comment">more_horiz</span>
+                                    {user && user.uid === comment.userId && <span className="material-icons-outlined del-comment" onClick={()=>{
+                                         setCommentId(comment.id)
+                                         
+                                         setDeleteCommentModel(true)
+                                     }}>more_horiz</span>}
                                      
-                                </div>
+                                </motion.div>
                             )}
 
                             </div>}
@@ -202,7 +224,7 @@ const Post = () => {
                         <button type="submit">Post</button>
                         </form>
                     </div>
-                </div>
+                </motion.div>
            </div>}
         </div>
      );
