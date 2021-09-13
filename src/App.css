@@ -74,6 +74,7 @@ a{
   .explore{
     gap: .5rem !important;
     padding: 0 .5rem;
+    grid-template-columns: repeat(2,1fr) !important;
   }
   .explore-model{
     grid-template-columns: 1fr !important;
@@ -96,6 +97,18 @@ a{
 .for-post{
   height: 180px !important;
 }
+.explore-icon-container:first-child{
+  margin-right: 1.5rem !important;
+}
+.explore-icon-container i{
+  font-size: 1rem !important;
+}
+.profile-img-container{
+  display: none !important;
+}
+.profile-posts-grid{
+  grid-template-columns: repeat(2,1fr) !important;
+}
 }
 @media only screen and (max-width:414px){
   .profile-posts-grid{
@@ -105,6 +118,9 @@ a{
   .profile-img-container{
     height: 6.5rem !important;
   }
+  .explore-icon-container:first-child{
+  margin-right: 1rem !important;
+}
 }
 @media only screen and (max-width: 375px){
   .left-model {

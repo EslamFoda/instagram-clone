@@ -7,6 +7,7 @@ import { motion,AnimatePresence } from "framer-motion";
 import './Profile.css'
 const Profile = () => {
     const [model,setModel] = useState()
+    const [isPending,setIsPending] = useState(false)
     const [user,setUser] = useState(projectAuth.currentUser)
     const type = ["image/jpeg","image/png"]
     const [file,setFile] = useState(null)
@@ -223,8 +224,9 @@ const Profile = () => {
                         <div>
                         <span className='error'>{fileError}</span>
                         </div>
-                    <button className='login-btn' onClick={async(e)=>{
+                    {!isPending && <button className='login-btn' onClick={async(e)=>{
                         e.preventDefault()
+                        setIsPending(true)
                         if(!fileError){
                            await uploadImage()
                            await database.collection('post').add({
@@ -237,8 +239,10 @@ const Profile = () => {
                             post: post
                         })
                         }
+                        setIsPending(false)
                         setModel(false)
-                    }}>Post</button>
+                    }}>Post</button>}
+                    {isPending && <button disabled style={{cursor:"not-allowed",opacity:'.5'}} className='login-btn'>Posting...</button>}
                     </div>
                 </motion.div>
             </div>}

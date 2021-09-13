@@ -6,12 +6,13 @@ import { useState } from 'react';
 import { useHistory } from 'react-router';
 const Login = () => {
     const history = useHistory()
-     const [email,setEmail] = useState('')
-    const [password,setPassword] = useState('')
+    const [email,setEmail] = useState('eslam@gmail.com')
+    const [password,setPassword] = useState('12345678')
     const [error,setError] = useState(null)
-
+    const [isPending,setIsPending] = useState(false)
     const handleLogin = async (e)=>{
     e.preventDefault();
+    setIsPending(true)
     setError(null)
     try {
         const res = await projectAuth.signInWithEmailAndPassword(email,password)
@@ -24,7 +25,8 @@ const Login = () => {
       catch(err) {
         console.log(err.message)
         setError(err.message)
-      }  
+      } 
+      setIsPending(false)
      
   }
     return ( 
@@ -34,9 +36,10 @@ const Login = () => {
             <div className='log-container'>
             <form onSubmit={handleLogin} className='login-form'>
                 <h1 style={{marginBottom:'2.5rem',fontFamily:'cursive'}}>InstaClone</h1>
-                <input type="email" required placeholder='Email address' onChange={(e)=>{setEmail(e.target.value)}}/>
-                <input type="password" required placeholder='Password' onChange={(e)=>{setPassword(e.target.value)}}/>
-                <button className='login-btn'>Log in</button>
+                <input type="email" required placeholder='Email address' value={email} onChange={(e)=>{setEmail(e.target.value)}}/>
+                <input type="password" required placeholder='Password' value={password} onChange={(e)=>{setPassword(e.target.value)}}/>
+                {!isPending && <button className='login-btn'>Log in</button>}
+                {isPending && <button disabled style={{cursor:"not-allowed",opacity:'.5'}} className='login-btn'>loading...</button>}
                 <span className='error'>{error}</span>
             </form>
             <div  className='dont-have'>

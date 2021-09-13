@@ -6,6 +6,7 @@ import { projectAuth,projectStorage,database,timestamp } from "./firebase";
 import './Explore.css'
 const Explore = () => {
     const ref = useRef();
+    const [isPending,setIsPending] = useState(false)
     const [model,setModel] = useState(false)
     const [deleteCommentModel,setDeleteCommentModel] = useState(false)
     const [user,setUser] = useState(projectAuth.currentUser)
@@ -207,8 +208,9 @@ const Explore = () => {
                         <div>
                         <span className='error'>{fileError}</span>
                         </div>
-                    <button className='login-btn' onClick={async(e)=>{
+                    {!isPending && <button className='login-btn' onClick={async(e)=>{
                         e.preventDefault()
+                        setIsPending(true)
                         if(!fileError){
                            await uploadImage()
                            await database.collection('post').add({
@@ -221,8 +223,10 @@ const Explore = () => {
                             post: post
                         })
                         }
+                        setIsPending(false)
                         setModel(false)
-                    }}>Post</button>
+                    }}>Post</button>}
+                    {isPending && <button disabled style={{cursor:"not-allowed",opacity:'.5'}} className='login-btn'>Posting...</button>}
                     </div>
                 </motion.div>
             </div>}

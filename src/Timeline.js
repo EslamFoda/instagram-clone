@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 const Timeline = () => {
     const ref = useRef();
+    const [isPending,setIsPending] = useState(false)
     const [deleteModel,setDeleteModel] = useState(false)
     const [model,setModel] = useState(false)
     const [user,setUser] = useState(projectAuth.currentUser)
@@ -124,8 +125,9 @@ const Timeline = () => {
                         <div>
                         <span className='error'>{fileError}</span>
                         </div>
-                    <button className='login-btn' onClick={async(e)=>{
+                   {!isPending && <button className='login-btn' onClick={async(e)=>{
                         e.preventDefault()
+                        setIsPending(true)
                         if(!fileError){
                            await uploadImage()
                            await database.collection('post').add({
@@ -138,8 +140,10 @@ const Timeline = () => {
                             post: post
                         })
                         }
+                        setIsPending(false)
                         setModel(false)
-                    }}>Post</button>
+                    }}>Post</button>}
+                    {isPending && <button disabled style={{cursor:"not-allowed",opacity:'.5'}} className='login-btn'>Posting...</button>}
                     </div>
                 </motion.div>
             </div>}
@@ -241,7 +245,7 @@ const Timeline = () => {
                 )}
             </div>}
            
-                {posts && !posts.length && <div>there is no posts yet</div>}
+                {posts && !posts.length && <div style={{textAlign:'center'}}>there is no posts yet</div>}
             </div>
         </div>
      );
