@@ -1,133 +1,133 @@
-*{
-   padding: 0;
-   margin: 0;
-   box-sizing: border-box ;
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
 }
-body{
+body {
   background-color: #fafafa;
 }
-a{
+a {
   text-decoration: none;
   color: inherit;
 }
-.log-container{
+.log-container {
   margin: 0 1rem;
 }
 
-/*** media **/ 
+/*** media **/
 @media only screen and (max-width: 1024px) {
-  nav{
-    padding: .8rem 1rem !important;
-    justify-content: space-between  !important;
+  nav {
+    padding: 0.8rem 1rem !important;
+    justify-content: space-between !important;
   }
-  .timeline-grid{
-        max-width: 700px !important;
+  .timeline-grid {
+    max-width: 700px !important;
   }
-  .explore-model{
+  .explore-model {
     margin: 0 3rem;
   }
 }
 @media only screen and (max-width: 768px) {
-  .profile-posts-grid{
+  .profile-posts-grid {
     padding: 0 2rem !important;
   }
-   .explore-model{
+  .explore-model {
     margin: 0 1.5rem;
   }
-  .post-contain,.explore{
+  .post-contain,
+  .explore {
     padding: 0 1rem;
   }
-  .login img{
+  .login img {
     display: none;
   }
-  .login{
-
+  .login {
     margin-top: 10% !important;
   }
 }
-@media only screen and (max-width:595px){
-  nav .search-container{
+@media only screen and (max-width: 595px) {
+  nav .search-container {
     display: none;
   }
-  .user-profile{
+  .user-profile {
     margin: 4.5rem 1rem 2rem !important;
   }
 }
-@media only screen and (max-width:529px){
-  .delete-container{
+@media only screen and (max-width: 529px) {
+  .delete-container {
     width: 250px !important;
   }
-  .user-profile-container{
+  .user-profile-container {
     flex-wrap: wrap !important;
     gap: 1rem !important;
   }
-     .fa-user-circle{
+  .fa-user-circle {
     margin-right: 0 !important;
   }
-  .timeline-grid{
-    padding: 0 .5rem;
+  .timeline-grid {
+    padding: 0 0.5rem;
   }
-  .profile-posts-grid{
+  .profile-posts-grid {
     grid-gap: 1rem !important;
     padding: 0 1rem !important;
   }
-  .explore{
-    gap: .5rem !important;
-    padding: 0 .5rem;
-    grid-template-columns: repeat(2,1fr) !important;
+  .explore {
+    gap: 0.5rem !important;
+    padding: 0 0.5rem;
+    grid-template-columns: repeat(2, 1fr) !important;
   }
-  .explore-model{
+  .explore-model {
     grid-template-columns: 1fr !important;
   }
-  .left-model{
+  .left-model {
     height: 250px !important;
   }
-  .model-center{
+  .model-center {
     height: 120px !important;
   }
-  .mod-user-details{
+  .mod-user-details {
     display: none !important;
   }
-  .mod-user-det{
-  display: flex !important;
-}
-.the-post{
-  grid-template-columns: 1fr !important;
-}
-.for-post{
-  height: 180px !important;
-}
-.explore-icon-container:first-child{
-  margin-right: 1.5rem !important;
-}
-.explore-icon-container i{
-  font-size: 1rem !important;
-}
-.profile-img-container{
-  display: none !important;
-}
-.profile-posts-grid{
-  grid-template-columns: repeat(2,1fr) !important;
-}
-}
-@media only screen and (max-width:414px){
-  .profile-posts-grid{
-    gap: .4rem !important;
-    padding: 0 .5rem !important;
+  .mod-user-det {
+    display: flex !important;
   }
-  .profile-img-container{
+  .the-post {
+    grid-template-columns: 1fr !important;
+  }
+  .for-post {
+    height: 180px !important;
+  }
+  .explore-icon-container:first-child {
+    margin-right: 1.5rem !important;
+  }
+  .explore-icon-container i {
+    font-size: 1rem !important;
+  }
+  .profile-img-container {
+    display: none !important;
+  }
+  .profile-posts-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+@media only screen and (max-width: 414px) {
+  .profile-posts-grid {
+    gap: 0.4rem !important;
+    padding: 0 0.5rem !important;
+  }
+  .profile-img-container {
     height: 6.5rem !important;
   }
-  .explore-icon-container:first-child{
-  margin-right: 1rem !important;
+  .explore-icon-container:first-child {
+    margin-right: 1rem !important;
+  }
 }
-}
-@media only screen and (max-width: 375px){
+@media only screen and (max-width: 375px) {
   .left-model {
     height: 190px !important;
-}
-.close-post{
-  margin: .5rem !important;
-  font-size: small;
-}
+  }
+  .close-post {
+    margin: 0.5rem !important;
+    font-size: small;
+  }
 }

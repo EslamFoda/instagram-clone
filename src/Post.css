@@ -1,8 +1,8 @@
-.post-contain{
-    margin: 5rem 0rem 2rem 0;
+.post-contain {
+  margin: 5rem 0rem 2rem 0;
 }
-.the-post{
-    display: grid;
-    grid-template-columns: repeat(2,1fr);
-     background-color: white;
+.the-post {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  background-color: white;
 }

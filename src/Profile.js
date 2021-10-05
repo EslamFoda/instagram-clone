@@ -226,21 +226,24 @@ const Profile = () => {
                         </div>
                     {!isPending && <button className='login-btn' onClick={async(e)=>{
                         e.preventDefault()
-                        setIsPending(true)
-                        if(!fileError){
-                           await uploadImage()
-                           await database.collection('post').add({
-                            userId:user.uid,
-                            userName: user.displayName,
-                            imgUrl: url,
-                            createdAt: timestamp(),
-                            comments: [],
-                            filePath: filePath,
-                            post: post
-                        })
+                        if(file){
+                            setIsPending(true)
+                            if(!fileError){
+                               await uploadImage()
+                               await database.collection('post').add({
+                                userId:user.uid,
+                                userName: user.displayName,
+                                imgUrl: url,
+                                createdAt: timestamp(),
+                                comments: [],
+                                filePath: filePath,
+                                post: post
+                            })
+                            }
+                            setIsPending(false)
+                            setModel(false)
+                            setFile(null)
                         }
-                        setIsPending(false)
-                        setModel(false)
                     }}>Post</button>}
                     {isPending && <button disabled style={{cursor:"not-allowed",opacity:'.5'}} className='login-btn'>Posting...</button>}
                     </div>
@@ -295,7 +298,7 @@ const Profile = () => {
             <div className='profile-post-container'>
                 <div className='post-icon-container'>
                     <div className='align-it'>
-                    <span className="material-icons">grid_on</span>
+                    <span className="material-icons-outlined">grid_on</span>
                     <span style={{marginTop:'-5px',marginLeft:'5px'}}>posts</span>
                     </div>
                 </div>
